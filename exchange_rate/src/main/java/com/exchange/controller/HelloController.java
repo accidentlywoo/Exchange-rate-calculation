@@ -2,15 +2,19 @@ package com.exchange.controller;
 
 import com.exchange.data.dto.CalculateExchangeDto;
 import com.exchange.data.dto.CalculateExchangeReqDto;
+import com.exchange.service.ExchangeService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
+@RequiredArgsConstructor
 @Controller
 public class HelloController {
+	private final ExchangeService exchangeService;
 	/**
 	 * TODO
 	 * 진입 후 /rate 호출할 지.
@@ -30,9 +34,9 @@ public class HelloController {
 	 *
 	 * @return
 	 */
-	@GetMapping("/rate")
-	public String getRate(){
-		return "index";
+	@GetMapping("/{currency}")
+	public ResponseEntity<String> getRate(@PathVariable String currency){
+		return exchangeService.getCurrency(currency);
 	}
 
 	/**
@@ -43,7 +47,7 @@ public class HelloController {
 	 * @return
 	 */
 	@PostMapping("/submit")
-	public CalculateExchangeDto exchange(@Validated @RequestBody CalculateExchangeReqDto reqDto){
-		return new CalculateExchangeDto();
+	public ResponseEntity<CalculateExchangeDto> exchange(@Validated @RequestBody CalculateExchangeReqDto reqDto){
+		return exchangeService.convert(reqDto);
 	}
 }
