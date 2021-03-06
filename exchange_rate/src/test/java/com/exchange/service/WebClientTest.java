@@ -1,5 +1,6 @@
 package com.exchange.service;
 
+import com.exchange.data.ReceptionConstant;
 import com.exchange.data.dto.CalculateExchangeDto;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.netty.channel.ChannelOption;
@@ -29,11 +30,9 @@ import java.util.stream.Collectors;
 
 @ExtendWith({MockitoExtension.class})
 public class WebClientTest {
-	@Value("${currency.accessKey}")
-	private String ACCESS_KEY;
+	private final String ACCESS_KEY="607762c676af5a7b9db6fb3a25ff5cad";
 
-	@Value("${currency.endpoint}")
-	private String ENDPOINT;
+	private final String ENDPOINT="api.currencylayer.com/";
 
 	String url = ENDPOINT + "?" + "access_key=" + ACCESS_KEY;
 	@Test
@@ -95,5 +94,20 @@ public class WebClientTest {
 				.collect(Collectors.toList());
 
 		System.out.println("  result : "+collect);
+
+		CalculateExchangeDto calculateExchangeDto = webClient
+				.mutate()
+				.baseUrl("http://" + ENDPOINT)
+				.build()
+				.get()
+				.uri("/convert?access_key=" + ACCESS_KEY+"&from=KRW&to="+ ReceptionConstant.REC_CODE.USA.getCode()+"&amount=2&format=1")
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.bodyToFlux(CalculateExchangeDto.class)
+				.toStream()
+				.collect(Collectors.toList())
+				.get(0);
+//http://api.currencylayer.com/historical?access_key=607762c676af5a7b9db6fb3a25ff5cad&date=2010-03-05&currencies=USD,AUD,CAD,PLN,MXN&format=1
+		System.out.println("  result : "+calculateExchangeDto);
 	}
 }
