@@ -33,7 +33,8 @@ public class HelloController {
 	}
 
 
-	@GetMapping("/{currency}")
+	@ResponseBody
+	@GetMapping("/current/{currency}")
 	public CurrentDto getRate(@PathVariable String currency){
 		return exchangeService.getCurrency(currency);
 	}

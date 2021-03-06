@@ -15,6 +15,43 @@
             bottom: 0;
         }
     </style>
+    <script type="application/javascript">
+        document.addEventListener('DOMContentLoaded',()=> {
+            const rec_select_box = document.getElementById('rec_select');
+            let httpRequest
+            const selected_object = document.querySelector('#rec_select option');
+            let getCode
+            const submit_btn = document.getElementById('submitBtn');
+            //
+            rec_select_box.addEventListener('change', e => {
+
+                getCode = e.target.value;
+
+                httpRequest = new XMLHttpRequest();
+
+                httpRequest.open('GET', '/current/'+getCode, true);
+
+                httpRequest.send();
+
+                httpRequest.onreadystatechange = updateRecCurrentExchangeRate;
+                //
+            });
+
+            function updateRecCurrentExchangeRate(){
+                if(httpRequest.readyState === XMLHttpRequest.DONE)
+                    return;
+
+                if(httpRequest.status === 200){
+                    let inputCurrent = document.getElementById('currentExchange');
+                    console.log(httpRequest.responseText);
+                    let res_current = JSON.parse(httpRequest.responseText);
+                    inputCurrent.defaultValue =res_current.quotes['USD'+getCode];
+                }
+            }
+
+
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -30,9 +67,9 @@
             </div>
             <div th:object="${current}" class="input-group mb-3">
                 <span class="input-group-text" th:for="reception">수취국가 </span>
-                <select class="form-select" name="reception" >
+                <select id="rec_select" class="form-select" name="reception" >
                     <option th:each="item : ${reception.keySet()}"
-                            th:value="${item}"
+                            th:value="${reception.get(item)}"
                             th:text="${item+'('+reception.get(item)+')'}"
                             th:selected="${reception.get(item)}=='KRW'"
                     ></option>
@@ -41,7 +78,7 @@
                 </select>
                 <span class="input-group-text" th:for="rate">환율 </span>
                 <!-- 선택된 수취국가 환율 1 USD 기준으로 -->
-                <input class="form-control" name="rate" type="text" th:value="${current.quotes.values()}" readonly>
+                <input id="currentExchange" class="form-control" name="rate" type="text" th:value="${current.quotes.values()[0]}" readonly>
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" th:for="money">송금액 </span>
@@ -49,7 +86,7 @@
                 <input class="form-control" name="money"  type="text">
                 <span class="input-group-text">USD</span>
             </div>
-            <button class="btn-primary">Submit</button>
+            <button id="submitBtn" class="btn-primary">Submit</button>
         </form>
     </section>
     <footer>Duck Typing - I Lova Doo Doo</footer>

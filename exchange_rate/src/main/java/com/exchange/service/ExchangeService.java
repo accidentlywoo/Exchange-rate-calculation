@@ -63,8 +63,21 @@ public class ExchangeService {
 	}
 
 	public CalculateExchangeDto convert(CalculateExchangeReqDto reqDto) {
+		WebClient webClient = WebClient.create();
+		CalculateExchangeDto currentDto = webClient
+				.mutate()
+				.baseUrl("http://" + ENDPOINT)
+				.build()
+				.get()
+				.uri("/convert?access_key=" + ACCESS_KEY+"&from="+reqDto.getFrom()+"&to="+ReceptionConstant.REC_CODE.USA.getCode()+"&amount="+reqDto.getAmount()+FORMAT_JSON_QUERY_PARAM)
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.bodyToFlux(CalculateExchangeDto.class)
+				.toStream()
+				.collect(Collectors.toList())
+				.get(0);
 
-		return null;
+		return currentDto;
 	}
 
 	public Map<String, String> getReception() {
