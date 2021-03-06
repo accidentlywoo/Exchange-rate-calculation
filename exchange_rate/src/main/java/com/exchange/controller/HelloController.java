@@ -40,6 +40,7 @@ public class HelloController {
 	}
 
 
+	@ResponseBody
 	@PostMapping("/submit")
 	public CalculateExchangeDto exchange(@Validated @RequestBody CalculateExchangeReqDto reqDto){
 		return exchangeService.convert(reqDto);

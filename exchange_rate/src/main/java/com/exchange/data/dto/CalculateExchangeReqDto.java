@@ -1,10 +1,14 @@
 package com.exchange.data.dto;
 
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CalculateExchangeReqDto {
 
@@ -16,7 +20,4 @@ public class CalculateExchangeReqDto {
 
 	@NotNull
 	private double amount;
-
-	@NotNull
-	private String format;
 }
