@@ -1,10 +1,10 @@
-package com.exchange.exchange_rate;
+package com.exchange;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ExchangeRateApplicationTests {
+public class ExchangeRateApplicationTests {
 
 	@Test
 	void contextLoads() {
