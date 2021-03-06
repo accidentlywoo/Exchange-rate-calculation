@@ -29,14 +29,13 @@ import java.util.stream.Collectors;
 
 @ExtendWith({MockitoExtension.class})
 public class WebClientTest {
-	@Value("currency.accessKey")
-	private String ACCESS_KEY="607762c676af5a7b9db6fb3a25ff5cad";
+	@Value("${currency.accessKey}")
+	private String ACCESS_KEY;
 
-	@Value("currency.endpoint")
-	private String ENDPOINT ="api.currencylayer.com";
+	@Value("${currency.endpoint}")
+	private String ENDPOINT;
 
 	String url = ENDPOINT + "?" + "access_key=" + ACCESS_KEY;
-
 	@Test
 	public void WebClient(){
 		HttpClient httpClient = HttpClient.create()
@@ -64,14 +63,19 @@ public class WebClientTest {
 	public void webclient_동작테스트() {
 		// given
 		WebClient webClient = WebClient.create();
-		Mono<Void> hello = webClient
+		CalculateExchangeDto hello = webClient
 				.mutate()
-				.baseUrl("http://" + url)
+				.baseUrl("http://" + ENDPOINT)
 				.build()
 				.get()
+				.uri("/live?access_key=" + ACCESS_KEY)
 				.accept(MediaType.APPLICATION_JSON)
 				.retrieve()
-				.bodyToMono(Void.class);
+				.bodyToFlux(CalculateExchangeDto.class)
+				.toStream()
+				.collect(Collectors.toList())
+				.get(0)
+				;
 //				.exchange()
 //				.flatMap(res -> res.bodyToMono(CalculateExchangeDto.class));
 		// when
