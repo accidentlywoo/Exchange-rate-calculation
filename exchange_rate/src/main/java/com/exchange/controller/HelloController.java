@@ -27,6 +27,7 @@ public class HelloController {
 	 */
 	@GetMapping("/")
 	public String welcompage(Model model){
+		model.addAttribute("reception",exchangeService.getReception());
 		model.addAttribute("current",exchangeService.getCurrency("KRW"));
 		return "index";
 	}

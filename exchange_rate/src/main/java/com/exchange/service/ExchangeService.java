@@ -1,5 +1,6 @@
 package com.exchange.service;
 
+import com.exchange.data.ReceptionConstant;
 import com.exchange.data.dto.CalculateExchangeDto;
 import com.exchange.data.dto.CalculateExchangeReqDto;
 import com.exchange.data.dto.CurrentDto;
@@ -25,8 +26,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -65,5 +65,13 @@ public class ExchangeService {
 	public CalculateExchangeDto convert(CalculateExchangeReqDto reqDto) {
 
 		return null;
+	}
+
+	public Map<String, String> getReception() {
+		Map<String, String> recMap = new HashMap<>();
+		recMap.put(ReceptionConstant.REC_CODE.KROREA.getNation(),ReceptionConstant.REC_CODE.KROREA.getCode());
+		recMap.put(ReceptionConstant.REC_CODE.JAPAN.getNation(),ReceptionConstant.REC_CODE.JAPAN.getCode());
+		recMap.put(ReceptionConstant.REC_CODE.PILIPINE.getNation(), ReceptionConstant.REC_CODE.PILIPINE.getCode());
+		return recMap;
 	}
 }
