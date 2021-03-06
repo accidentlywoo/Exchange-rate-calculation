@@ -25,24 +25,22 @@
     <section>
         <form>
             <div class="input-group mb-3">
-                <span class="input-group-text" th:for="remittance">송금국가 : </span>
+                <span class="input-group-text" th:for="remittance">송금국가 </span>
                 <input class="form-control" name="remittance" value="미국(USD)"  type="text" readonly>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" th:for="reception">수취국가 : </span>
+            <div th:object="${current}" class="input-group mb-3">
+                <span class="input-group-text" th:for="reception">수취국가 </span>
                 <select class="form-select" name="reception">
                     <option value="KRW">한국(KRW)</option>
                     <option value="JPY">일본(JPY)</option>
                     <option value="PHP`">필리핀(PHP)</option>
                 </select>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" th:for="rate">환율 : </span>
+                <span class="input-group-text" th:for="rate">환율 </span>
                 <!-- 선택된 수취국가 환율 1 USD 기준으로 -->
-                <input class="form-control" name="rate" type="text" readonly>
+                <input class="form-control" name="rate" type="text" th:value="${current.quotes.values()}" readonly>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" th:for="money">송금액 : </span>
+                <span class="input-group-text" th:for="money">송금액 </span>
                 <!-- 선택된 수취국가 환율 1 USD 기준으로 -->
                 <input class="form-control" name="money"  type="text">
                 <span class="input-group-text">USD</span>
