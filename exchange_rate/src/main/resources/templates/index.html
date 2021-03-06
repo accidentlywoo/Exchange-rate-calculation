@@ -113,14 +113,14 @@
             <div class="input-group mb-3">
                 <span class="input-group-text" th:for="money">송금액 </span>
                 <!-- 선택된 수취국가 환율 1 USD 기준으로 -->
-                <input id="sendAmount" class="form-control" name="money"  type="text">
+                <input id="sendAmount" class="form-control" name="money"  type="number" min="0" max="10000">
                 <span class="input-group-text">USD</span>
             </div>
             <button id="submitBtn" class="btn-primary">Submit</button>
             <div class="input-group mb-3 result">
                 <span class="input-group-text" th:for="money">환율 계산결과 </span>
                 <!-- 선택된 수취국가 환율 1 USD 기준으로 -->
-                <input id="resultCalculation" class="form-control" name="money"  type="text">
+                <input id="resultCalculation" class="form-control" name="money"  type="text" readonly>
                 <span class="input-group-text">USD</span>
             </div>
         </form>
