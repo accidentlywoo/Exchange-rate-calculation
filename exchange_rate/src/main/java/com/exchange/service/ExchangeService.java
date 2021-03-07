@@ -5,6 +5,9 @@ import com.exchange.data.ReceptionConstant;
 import com.exchange.data.dto.CalculateExchangeDto;
 import com.exchange.data.dto.CalculateExchangeReqDto;
 import com.exchange.data.dto.CurrentDto;
+import com.exchange.data.dto.ExchangeDto;
+import com.exchange.data.entity.ExchangeRate;
+import com.exchange.repository.ExchageRateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -19,49 +22,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ExchangeService {
-	private final RestTemplateBuilder restTemplateBuilder;
-	// https://currencylayer.com/quickstart
 
-	private final ExternalExchangeProperty EX;
+	private final ExchageRateRepository exchageRateRepository;
 
-	private final String FORMAT_JSON_QUERY_PARAM = "&format=1";
 
-	public ResponseEntity<CurrentDto> getCurrency(String currency) {
-		String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		WebClient webClient = WebClient.create();
-		CurrentDto currentDto = webClient
-				.mutate()
-				.baseUrl("http://" + EX.getApiendpoint())
-				.build()
-				.get()
-				.uri("/historical?access_key=" + EX.getAccesskey()+"&date="+now+"&currencies="+currency+FORMAT_JSON_QUERY_PARAM)
-				.accept(MediaType.APPLICATION_JSON)
-				.retrieve()
-				.bodyToFlux(CurrentDto.class)
-				.toStream()
-				.collect(Collectors.toList())
-				.get(0);
+	public ResponseEntity<ExchangeDto> getCurrency(String currency) {
+		Optional<ExchangeRate> byFromNationAndIsCurrent = exchageRateRepository.findByFromNationAndIsCurrent(currency, true);
 
-		//http://api.currencylayer.com/historical?access_key=607762c676af5a7b9db6fb3a25ff5cad&date=2010-03-05&currencies=USD&format=1
-		return ResponseEntity.ok(currentDto);
+		return ResponseEntity.ok(ExchangeDto.builder()
+				.quotes(byFromNationAndIsCurrent.get().getQoutes())
+				.build());
 	}
 
 	public ResponseEntity<CalculateExchangeDto> convert(CalculateExchangeReqDto reqDto) {
-		WebClient webClient = WebClient.create();
-		CalculateExchangeDto currentDto = webClient
-				.mutate()
-				.baseUrl("http://" + EX.getApiendpoint())
-				.build()
-				.get()
-				.uri("/convert?access_key=" + EX.getAccesskey()+"&from="+reqDto.getFrom()+"&to="+ReceptionConstant.REC_CODE.USA.getCode()+"&amount="+reqDto.getAmount()+FORMAT_JSON_QUERY_PARAM)
-				.accept(MediaType.APPLICATION_JSON)
-				.retrieve()
-				.bodyToFlux(CalculateExchangeDto.class)
-				.toStream()
-				.collect(Collectors.toList())
-				.get(0);
 
-		return ResponseEntity.ok(currentDto);
+//		return ResponseEntity.ok(currentDto);
+		return null;
 	}
 
 	public Map<String, String> getReception() {

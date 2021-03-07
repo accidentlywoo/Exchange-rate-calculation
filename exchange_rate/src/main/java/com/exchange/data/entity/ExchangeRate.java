@@ -1,5 +1,6 @@
 package com.exchange.data.entity;
 
+import com.exchange.data.ReceptionConstant;
 import com.exchange.data.dto.ExchangeInfo;
 
 import javax.persistence.*;
@@ -16,15 +17,18 @@ public class ExchangeRate {
 
 	private double qoutes;
 
+	private boolean isCurrent;
+
 	protected ExchangeRate(){}
 
-	private ExchangeRate(String fromNation, String toNation, double qoutes) {
+	private ExchangeRate(String fromNation, double qoutes) {
 		this.fromNation = fromNation;
-		this.toNation = toNation;
+		toNation = ReceptionConstant.REC_CODE.USA.getCode();
 		this.qoutes = qoutes;
+		isCurrent = true;
 	}
-	public static ExchangeRate createExchangeRate(String fromNation, String toNation, double qoutes){
-		return new ExchangeRate(fromNation,toNation,qoutes);
+	public static ExchangeRate createExchangeRate(String fromNation, double qoutes){
+		return new ExchangeRate(fromNation,qoutes);
 	}
 
 	public ExchangeInfo getExchangeRateInfo(){
@@ -34,4 +38,8 @@ public class ExchangeRate {
 				.qoutes(qoutes)
 				.build();
 	}
+	public void updateCurrentFalse(){
+		isCurrent = false;
+	}
+	public double getQoutes(){return qoutes;}
 }
