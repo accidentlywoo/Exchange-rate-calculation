@@ -6,6 +6,7 @@ import com.exchange.data.dto.CurrentDto;
 import com.exchange.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,13 @@ public class ExchangeController {
 	private final ExchangeService exchangeService;
 
 	@GetMapping("/{currency}")
-	public CurrentDto getRate(@PathVariable String currency){
+	public ResponseEntity<CurrentDto> getRate(@PathVariable String currency){
 		return exchangeService.getCurrency(currency);
 	}
 
 
 	@PostMapping("/submit")
-	public CalculateExchangeDto exchange(@Validated @RequestBody CalculateExchangeReqDto reqDto){
+	public ResponseEntity<CalculateExchangeDto> exchange(@Validated @RequestBody CalculateExchangeReqDto reqDto){
 		return exchangeService.convert(reqDto);
 	}
 }

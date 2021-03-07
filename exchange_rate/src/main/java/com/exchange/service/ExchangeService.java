@@ -4,30 +4,15 @@ import com.exchange.data.ReceptionConstant;
 import com.exchange.data.dto.CalculateExchangeDto;
 import com.exchange.data.dto.CalculateExchangeReqDto;
 import com.exchange.data.dto.CurrentDto;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
-import org.thymeleaf.util.DateUtils;
-import reactor.netty.http.client.HttpClient;
 
-import java.net.URI;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -42,7 +27,7 @@ public class ExchangeService {
 
 	private final String FORMAT_JSON_QUERY_PARAM = "&format=1";
 
-	public CurrentDto getCurrency(String currency) {
+	public ResponseEntity<CurrentDto> getCurrency(String currency) {
 		String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		WebClient webClient = WebClient.create();
 		CurrentDto currentDto = webClient
@@ -59,10 +44,10 @@ public class ExchangeService {
 				.get(0);
 
 		//http://api.currencylayer.com/historical?access_key=607762c676af5a7b9db6fb3a25ff5cad&date=2010-03-05&currencies=USD&format=1
-		return currentDto;
+		return ResponseEntity.ok(currentDto);
 	}
 
-	public CalculateExchangeDto convert(CalculateExchangeReqDto reqDto) {
+	public ResponseEntity<CalculateExchangeDto> convert(CalculateExchangeReqDto reqDto) {
 		WebClient webClient = WebClient.create();
 		CalculateExchangeDto currentDto = webClient
 				.mutate()
@@ -77,7 +62,7 @@ public class ExchangeService {
 				.collect(Collectors.toList())
 				.get(0);
 
-		return currentDto;
+		return ResponseEntity.ok(currentDto);
 	}
 
 	public Map<String, String> getReception() {
