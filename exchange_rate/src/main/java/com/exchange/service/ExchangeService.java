@@ -22,11 +22,7 @@ public class ExchangeService {
 	private final RestTemplateBuilder restTemplateBuilder;
 	// https://currencylayer.com/quickstart
 
-	private final ExternalExchangeProperty externalExchangeProperty;
-
-	private final String ACCESS_KEY= externalExchangeProperty.getAccesskey();
-
-	private final String ENDPOINT= externalExchangeProperty.getApiendpoint();
+	private final ExternalExchangeProperty EX;
 
 	private final String FORMAT_JSON_QUERY_PARAM = "&format=1";
 
@@ -35,10 +31,10 @@ public class ExchangeService {
 		WebClient webClient = WebClient.create();
 		CurrentDto currentDto = webClient
 				.mutate()
-				.baseUrl("http://" + ENDPOINT)
+				.baseUrl("http://" + EX.getApiendpoint())
 				.build()
 				.get()
-				.uri("/historical?access_key=" + ACCESS_KEY+"&date="+now+"&currencies="+currency+FORMAT_JSON_QUERY_PARAM)
+				.uri("/historical?access_key=" + EX.getAccesskey()+"&date="+now+"&currencies="+currency+FORMAT_JSON_QUERY_PARAM)
 				.accept(MediaType.APPLICATION_JSON)
 				.retrieve()
 				.bodyToFlux(CurrentDto.class)
@@ -54,10 +50,10 @@ public class ExchangeService {
 		WebClient webClient = WebClient.create();
 		CalculateExchangeDto currentDto = webClient
 				.mutate()
-				.baseUrl("http://" + ENDPOINT)
+				.baseUrl("http://" + EX.getApiendpoint())
 				.build()
 				.get()
-				.uri("/convert?access_key=" + ACCESS_KEY+"&from="+reqDto.getFrom()+"&to="+ReceptionConstant.REC_CODE.USA.getCode()+"&amount="+reqDto.getAmount()+FORMAT_JSON_QUERY_PARAM)
+				.uri("/convert?access_key=" + EX.getAccesskey()+"&from="+reqDto.getFrom()+"&to="+ReceptionConstant.REC_CODE.USA.getCode()+"&amount="+reqDto.getAmount()+FORMAT_JSON_QUERY_PARAM)
 				.accept(MediaType.APPLICATION_JSON)
 				.retrieve()
 				.bodyToFlux(CalculateExchangeDto.class)
