@@ -1,5 +1,6 @@
 package com.exchange.service;
 
+import com.exchange.config.ExternalExchangeProperty;
 import com.exchange.data.ReceptionConstant;
 import com.exchange.data.dto.CalculateExchangeDto;
 import com.exchange.data.dto.CalculateExchangeReqDto;
@@ -21,9 +22,11 @@ public class ExchangeService {
 	private final RestTemplateBuilder restTemplateBuilder;
 	// https://currencylayer.com/quickstart
 
-	private final String ACCESS_KEY="607762c676af5a7b9db6fb3a25ff5cad";
+	private final ExternalExchangeProperty externalExchangeProperty;
 
-	private final String ENDPOINT="api.currencylayer.com/";
+	private final String ACCESS_KEY= externalExchangeProperty.getAccesskey();
+
+	private final String ENDPOINT= externalExchangeProperty.getApiendpoint();
 
 	private final String FORMAT_JSON_QUERY_PARAM = "&format=1";
 
