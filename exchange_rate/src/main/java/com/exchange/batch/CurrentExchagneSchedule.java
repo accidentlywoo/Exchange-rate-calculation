@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -30,7 +31,6 @@ public class CurrentExchagneSchedule {
 	public void stachCurrentExchangeRate(){
 		List<String> fromNations = Arrays.asList(ReceptionConstant.REC_CODE.KROREA.getCode(), ReceptionConstant.REC_CODE.PILIPINE.getCode(), ReceptionConstant.REC_CODE.JAPAN.getCode());
 		String defaultToNation = ReceptionConstant.REC_CODE.USA.getCode();
-
 		final String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		for(String item : fromNations){
 			WebClient webClient = WebClient.create();
@@ -46,7 +46,9 @@ public class CurrentExchagneSchedule {
 					.toStream()
 					.collect(Collectors.toList())
 					.get(0);
-			ExchangeRate exchangeRate = ExchangeRate.createExchangeRate(item, defaultToNation, currentDto.getQuotes().get(item + defaultToNation));
+			Optional<ExchangeRate> byFromNation = exchageRateRepository.findByFromNation(item);
+			byFromNation.ifPresent(ExchangeRate::updateCurrentFalse);
+			ExchangeRate exchangeRate = ExchangeRate.createExchangeRate(item, currentDto.getQuotes().get(item + defaultToNation));
 			exchageRateRepository.save(exchangeRate);
 		}
 
