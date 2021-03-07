@@ -30,7 +30,7 @@
 
                 httpRequest = new XMLHttpRequest();
 
-                httpRequest.open('GET', '/current/'+getCode, true);
+                httpRequest.open('GET', '/exchange/'+getCode, true);
 
                 httpRequest.send();
 
@@ -53,7 +53,7 @@
                 httpRequest = new XMLHttpRequest();
 
 
-                httpRequest.open('POST', '/submit', true);
+                httpRequest.open('POST', '/exchange/submit', true);
 
                 httpRequest.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
 
