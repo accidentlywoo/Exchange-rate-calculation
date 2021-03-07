@@ -110,7 +110,7 @@
                 </select>
                 <span class="input-group-text" th:for="rate">환율 </span>
                 <!-- 선택된 수취국가 환율 1 USD 기준으로 -->
-                <input id="currentExchange" class="form-control" name="rate" type="text" th:value="${current.quotes.values()[0]}" readonly>
+                <input id="currentExchange" class="form-control" name="rate" type="text" th:value="${current.quotes}" readonly>
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" th:for="money">송금액 </span>
