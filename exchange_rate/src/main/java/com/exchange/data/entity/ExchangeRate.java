@@ -18,6 +18,15 @@ public class ExchangeRate {
 
 	protected ExchangeRate(){}
 
+	private ExchangeRate(String fromNation, String toNation, double qoutes) {
+		this.fromNation = fromNation;
+		this.toNation = toNation;
+		this.qoutes = qoutes;
+	}
+	public static ExchangeRate createExchangeRate(String fromNation, String toNation, double qoutes){
+		return new ExchangeRate(fromNation,toNation,qoutes);
+	}
+
 	public ExchangeInfo getExchangeRateInfo(){
 		return ExchangeInfo.builder()
 				.from(fromNation)
